@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tranquil Escapes Property Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #1B2A4A;
+      --gold: #C9A84C;
+      --light-gold: #E8D5A3;
+      --cream: #FAF7F2;
+      --white: #FFFFFF;
+      --gray: #6B7280;
+      --light-gray: #F3F4F6;
+    }
+    body { font-family: 'Lato', sans-serif; color: var(--navy); background: var(--cream); }
+
+    /* NAV */
+    nav {
+      background: var(--navy);
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+    }
+    .nav-logo span {
+      color: var(--white);
+      font-size: 0.75rem;
+      display: block;
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .nav-logo .nav-brand {
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    .nav-links { display: flex; gap: 0; }
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 0 1.1rem;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 400;
+      transition: all 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--gold);
+      border-bottom: 3px solid var(--gold);
+    }
+
+    /* SECTIONS */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #2D4A7A 50%, #1B2A4A 100%);
+      color: white;
+      text-align: center;
+      padding: 110px 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="40" fill="rgba(201,168,76,0.05)"/><circle cx="80" cy="80" r="50" fill="rgba(201,168,76,0.05)"/></svg>') no-repeat center;
+      background-size: cover;
+    }
+    .hero-content { position: relative; max-width: 850px; margin: 0 auto; }
+    .hero-tagline { color: var(--gold); font-size: 0.85rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1.2rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: 3.4rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.2; }
+    .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.85); max-width: 620px; margin: 0 auto 2.5rem; line-height: 1.9; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      padding: 15px 36px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    .btn-primary:hover { background: var(--light-gold); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent;
+      color: white;
+      padding: 15px 36px;
+      border: 2px solid rgba(255,255,255,0.5);
+      font-size: 0.9rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* PAGE HEADER */
+    .page-header {
+      background: linear-gradient(135deg, var(--navy), #2D4A7A);
+      color: white;
+      text-align: center;
+      padding: 65px 2rem;
+    }
+    .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.6rem; margin-bottom: 0.5rem; }
+    .page-header p { color: var(--gold); letter-spacing: 3px; font-size: 0.8rem; text-transform: uppercase; margin-top: 0.5rem; }
+    .gold-divider { width: 60px; height: 3px; background: var(--gold); margin: 1rem auto 0; }
+
+    /* ── ABOUT ── */
+    .about-wrap { max-width: 1100px; margin: 0 auto; padding: 70px 2rem; }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 5rem;
+    }
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 12px 40px rgba(27,42,74,0.18);
+      border: 4px solid var(--gold);
+    }
+    .about-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, var(--navy), #2D4A7A);
+      border: 4px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      text-align: center;
+      padding: 2rem;
+      gap: 1rem;
+    }
+    .about-photo-placeholder span { font-size: 4rem; }
+    .about-text .eyebrow { color: var(--gold); font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 0.8rem; display: block; }
+    .about-text h2 { font-family: 'Playfair Display', serif; font-size: 2.1rem; margin-bottom: 1.2rem; color: var(--navy); line-height: 1.3; }
+    .about-text p { color: var(--gray); line-height: 1.95; margin-bottom: 1rem; font-size: 0.95rem; }
+    .about-text .signature { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--navy); margin-top: 1.5rem; }
+    .about-text .sig-title { font-size: 0.8rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-top: 0.3rem; }
+
+    .values-section h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; text-align: center; margin-bottom: 2.5rem; color: var(--navy); }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .value-card {
+      background: white;
+      padding: 2rem;
+      text-align: center;
+      border-top: 4px solid var(--gold);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+    .value-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .value-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--navy); }
+    .value-card p { color: var(--gray); font-size: 0.9rem; line-height: 1.7; }
+
+    /* ── SERVICES OVERVIEW ── */
+    .services-wrap { max-width: 1100px; margin: 0 auto; padding: 70px 2rem; }
+    .services-intro { text-align: center; max-width: 680px; margin: 0 auto 3.5rem; }
+    .services-intro h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; color: var(--navy); }
+    .services-intro p { color: var(--gray); line-height: 1.9; font-size: 0.95rem; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+    .service-card {
+      background: white;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 14px 35px rgba(0,0,0,0.13); }
+    .service-card-header {
+      background: linear-gradient(135deg, var(--navy), #2D4A7A);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    .service-card-header .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+    .service-card-header h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+    .service-card-body { padding: 1.6rem; }
+    .service-card-body p { color: var(--gray); font-size: 0.9rem; line-height: 1.8; margin-bottom: 1rem; }
+    .service-card-body ul { color: var(--gray); font-size: 0.88rem; padding-left: 1.2rem; line-height: 2.1; }
+    .service-card-body li::marker { color: var(--gold); }
+    .service-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 2px;
+    }
+
+    /* ── PROPERTY MANAGEMENT ── */
+    .mgmt-wrap { max-width: 1100px; margin: 0 auto; padding: 70px 2rem; }
+    .mgmt-intro { text-align: center; max-width: 700px; margin: 0 auto 3.5rem; }
+    .mgmt-intro h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; }
+    .mgmt-intro p { color: var(--gray); line-height: 1.9; }
+    .mgmt-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+    .step-card {
+      background: white;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+    .step-number {
+      width: 52px; height: 52px;
+      background: var(--gold);
+      color: var(--navy);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.2rem;
+      margin: 0 auto 1rem;
+      font-family: 'Playfair Display', serif;
+    }
+    .step-card h4 { font-family: 'Playfair Display', serif; margin-bottom: 0.5rem; color: var(--navy); font-size: 1rem; }
+    .step-card p { color: var(--gray); font-size: 0.88rem; line-height: 1.7; }
+    .mgmt-features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+    .mgmt-feature {
+      background: white;
+      padding: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--gold);
+    }
+    .mgmt-feature-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .mgmt-feature h4 { font-family: 'Playfair Display', serif; margin-bottom: 0.3rem; color: var(--navy); }
+    .mgmt-feature p { color: var(--gray); font-size: 0.88rem; line-height: 1.7; }
+
+    /* ── PROPERTY PRESERVATION ── */
+    .pres-wrap { max-width: 1100px; margin: 0 auto; padding: 70px 2rem; }
+    .pres-intro { text-align: center; max-width: 700px; margin: 0 auto 3.5rem; }
+    .pres-intro h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; }
+    .pres-intro p { color: var(--gray); line-height: 1.9; }
+    .pres-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+    .pres-item {
+      background: white;
+      padding: 1.6rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .pres-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .pres-item h4 { font-family: 'Playfair Display', serif; margin-bottom: 0.3rem; color: var(--navy); }
+    .pres-item p { color: var(--gray); font-size: 0.88rem; line-height: 1.7; }
+    .pres-cta {
+      background: linear-gradient(135deg, var(--navy), #2D4A7A);
+      color: white;
+      padding: 3rem;
+      text-align: center;
+    }
+    .pres-cta h3 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1rem; }
+    .pres-cta p { color: rgba(255,255,255,0.85); margin-bottom: 1.5rem; max-width: 550px; margin-left: auto; margin-right: auto; line-height: 1.8; }
+
+    /* ── VACATION PLANNING ── */
+    .travel-wrap { max-width: 1100px; margin: 0 auto; padding: 70px 2rem; }
+    .travel-banner {
+      background: linear-gradient(135deg, var(--navy), #2D4A7A);
+      color: white;
+      padding: 3.5rem 2rem;
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+    .travel-banner h2 { font-family: 'Playfair Display', serif; font-size: 2.1rem; margin-bottom: 0.7rem; }
+    .travel-banner p { color: rgba(255,255,255,0.85); max-width: 600px; margin: 0 auto 1.8rem; line-height: 1.9; }
+    .travel-packages { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem; }
+    .pkg-card {
+      background: white;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+    .pkg-card:hover { transform: translateY(-5px); }
+    .pkg-header {
+      background: var(--gold);
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .pkg-header .pkg-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .pkg-header h3 { font-family: 'Playfair Display', serif; color: var(--navy); font-size: 1.15rem; }
+    .pkg-body { padding: 1.5rem; }
+    .pkg-body p { color: var(--gray); font-size: 0.9rem; line-height: 1.8; margin-bottom: 0.8rem; }
+    .pkg-body ul { color: var(--gray); font-size: 0.88rem; padding-left: 1.2rem; line-height: 2.1; }
+    .pkg-body li::marker { color: var(--navy); }
+    .travel-why { margin-bottom: 3rem; }
+    .travel-why h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; text-align: center; margin-bottom: 2rem; color: var(--navy); }
+    .why-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .why-item {
+      background: white;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-bottom: 3px solid var(--gold);
+    }
+    .why-item .why-icon { font-size: 2rem; margin-bottom: 0.7rem; }
+    .why-item h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--navy); margin-bottom: 0.4rem; }
+    .why-item p { color: var(--gray); font-size: 0.82rem; line-height: 1.6; }
+
+    /* ── CONTACT ── */
+    .contact-wrap { max-width: 900px; margin: 0 auto; padding: 70px 2rem; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .contact-info h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--navy); }
+    .contact-detail { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.5rem; }
+    .contact-detail .c-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .contact-detail h4 { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 0.2rem; }
+    .contact-detail p { color: var(--gray); font-size: 0.9rem; line-height: 1.6; }
+    .contact-detail a { color: var(--gold); text-decoration: none; }
+    .contact-form h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--navy); }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); margin-bottom: 0.4rem; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #D1D5DB;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.9rem;
+      color: var(--navy);
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+    .form-group textarea { height: 120px; resize: vertical; }
+    .form-submit { width: 100%; padding: 14px; background: var(--navy); color: white; border: none; font-family: 'Lato', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+    .form-submit:hover { background: var(--gold); color: var(--navy); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 2.5rem 2rem;
+    }
+    footer .footer-brand { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.2rem; margin-bottom: 0.5rem; }
+    footer p { font-size: 0.82rem; line-height: 1.8; }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .about-grid, .contact-grid { grid-template-columns: 1fr; }
+      .services-grid, .travel-packages, .mgmt-steps { grid-template-columns: 1fr; }
+      .values-grid, .pres-grid, .mgmt-features { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .nav-links a { padding: 0 0.7rem; font-size: 0.72rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <img src="https://media.base44.com/images/public/6a0638c9d48fc3764e9cd50f/b78885351_TranquilEscapesPropertyManagementLogo.png" alt="Tranquil Escapes Property Management" style="height:56px; width:auto; object-fit:contain; filter:brightness(0) invert(1);" />
+    </div>
+    <div class="nav-links">
+      <a href="#" class="active" onclick="showSection('home', this)">Home</a>
+      <a href="#" onclick="showSection('about', this)">About</a>
+      <a href="#" onclick="showSection('services', this)">Services</a>
+      <a href="#" onclick="showSection('management', this)">Property Mgmt</a>
+      <a href="#" onclick="showSection('preservation', this)">Preservation</a>
+      <a href="#" onclick="showSection('vacation', this)">Vacation Planning</a>
+      <a href="#" onclick="showSection('contact', this)">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div id="home" class="section active">
+  <div class="hero">
+    <div class="hero-content">
+      <img src="https://media.base44.com/images/public/6a0638c9d48fc3764e9cd50f/b78885351_TranquilEscapesPropertyManagementLogo.png" alt="Tranquil Escapes Property Management Logo" style="width:220px; height:auto; margin-bottom:1.5rem; filter:drop-shadow(0 4px 16px rgba(0,0,0,0.35));" />
+      <p class="hero-tagline">Welcome to Tranquil Escapes</p>
+      <h1>Where Every Property Tells a Story of Excellence</h1>
+      <p>Professional property management, preservation services, and curated vacation planning — all under one trusted name.</p>
+      <div class="hero-btns">
+        <a href="#" class="btn-primary" onclick="showSection('services', document.querySelectorAll('.nav-links a')[2])">Our Services</a>
+        <a href="#" class="btn-outline" onclick="showSection('contact', document.querySelectorAll('.nav-links a')[6])">Get In Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Services Strip -->
+  <div style="background:white; padding: 3rem 2rem;">
+    <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns: repeat(3,1fr); gap:2rem; text-align:center;">
+      <div onclick="showSection('management', document.querySelectorAll('.nav-links a')[3])" style="cursor:pointer; padding:2rem; border-top: 4px solid var(--gold); transition:box-shadow 0.3s;" onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
+        <div style="font-size:2.8rem; margin-bottom:0.8rem;">🏠</div>
+        <h3 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.5rem;">Property Management</h3>
+        <p style="color:var(--gray); font-size:0.88rem; line-height:1.7;">Full-service management for residential and short-term rental properties.</p>
+      </div>
+      <div onclick="showSection('preservation', document.querySelectorAll('.nav-links a')[4])" style="cursor:pointer; padding:2rem; border-top: 4px solid var(--gold); transition:box-shadow 0.3s;" onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
+        <div style="font-size:2.8rem; margin-bottom:0.8rem;">🔧</div>
+        <h3 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.5rem;">Property Preservation</h3>
+        <p style="color:var(--gray); font-size:0.88rem; line-height:1.7;">Protecting and maintaining your property investment at the highest standard.</p>
+      </div>
+      <div onclick="showSection('vacation', document.querySelectorAll('.nav-links a')[5])" style="cursor:pointer; padding:2rem; border-top: 4px solid var(--gold); transition:box-shadow 0.3s;" onmouseover="this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
+        <div style="font-size:2.8rem; margin-bottom:0.8rem;">✈️</div>
+        <h3 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.5rem;">Vacation Planning</h3>
+        <p style="color:var(--gray); font-size:0.88rem; line-height:1.7;">Curated, luxurious travel experiences crafted around your lifestyle.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Choose Us -->
+  <div style="background:var(--cream); padding:5rem 2rem;">
+    <div style="max-width:1100px; margin:0 auto; text-align:center;">
+      <p style="color:var(--gold); font-size:0.8rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">Why Tranquil Escapes</p>
+      <h2 style="font-family:'Playfair Display',serif; font-size:2rem; color:var(--navy); margin-bottom:1rem;">Your Property. Our Priority.</h2>
+      <p style="color:var(--gray); max-width:600px; margin:0 auto 3rem; line-height:1.9; font-size:0.95rem;">We bring professionalism, dedication, and heart to every property we manage and every trip we plan.</p>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:1.5rem;">
+        <div style="background:white; padding:1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="font-size:2rem; margin-bottom:0.7rem;">🤝</div>
+          <h4 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.4rem; font-size:0.95rem;">Trusted Partner</h4>
+          <p style="color:var(--gray); font-size:0.82rem; line-height:1.6;">Reliable, transparent, and always in your corner.</p>
+        </div>
+        <div style="background:white; padding:1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="font-size:2rem; margin-bottom:0.7rem;">⭐</div>
+          <h4 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.4rem; font-size:0.95rem;">Premium Service</h4>
+          <p style="color:var(--gray); font-size:0.82rem; line-height:1.6;">White-glove attention to every detail.</p>
+        </div>
+        <div style="background:white; padding:1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="font-size:2rem; margin-bottom:0.7rem;">📍</div>
+          <h4 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.4rem; font-size:0.95rem;">Local Expertise</h4>
+          <p style="color:var(--gray); font-size:0.82rem; line-height:1.6;">Deep knowledge of the Philadelphia market and beyond.</p>
+        </div>
+        <div style="background:white; padding:1.8rem; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+          <div style="font-size:2rem; margin-bottom:0.7rem;">💼</div>
+          <h4 style="font-family:'Playfair Display',serif; color:var(--navy); margin-bottom:0.4rem; font-size:0.95rem;">Full-Service</h4>
+          <p style="color:var(--gray); font-size:0.82rem; line-height:1.6;">Property, preservation, and travel — all in one place.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Banner -->
+  <div style="background:var(--navy); padding:4rem 2rem; text-align:center;">
+    <p style="color:var(--gold); font-size:0.8rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:0.8rem;">Ready to Get Started?</p>
+    <h2 style="font-family:'Playfair Display',serif; font-size:2rem; color:white; margin-bottom:1rem;">Let's Talk About Your Property Needs</h2>
+    <p style="color:rgba(255,255,255,0.8); margin-bottom:2rem; max-width:500px; margin-left:auto; margin-right:auto; line-height:1.8;">Whether you need a property managed, preserved, or just need a vacation — we've got you covered.</p>
+    <a href="#" class="btn-primary" onclick="showSection('contact', document.querySelectorAll('.nav-links a')[6])">Contact Us Today</a>
+  </div>
+</div>
+
+<!-- ══════════════════ ABOUT ══════════════════ -->
+<div id="about" class="section">
+  <div class="page-header">
+    <img src="https://media.base44.com/images/public/6a0638c9d48fc3764e9cd50f/b78885351_TranquilEscapesPropertyManagementLogo.png" alt="Logo" style="height:70px; width:auto; margin-bottom:0.8rem; filter:brightness(0) invert(1);" /><br/>
+    <h1>About Me</h1>
+    <div class="gold-divider"></div>
+    <p>The heart behind Tranquil Escapes</p>
+  </div>
+  <div class="about-wrap">
+    <div class="about-grid">
+      <div class="about-photo-placeholder">
+        <span>🌊</span>
+        <p>Erin Carter<br/>Founder & CEO</p>
+      </div>
+      <div class="about-text">
+        <span class="eyebrow">Meet Your Property Partner</span>
+        <h2>Hi, I'm Erin Carter — Founder of Tranquil Escapes Property Management</h2>
+        <p>I started Tranquil Escapes Property Management because I believe that owning property should be a source of peace, not stress. Whether you're a homeowner, an investor, or a lender with a property in need of care, I'm here to make sure your investment is protected and thriving.</p>
+        <p>Based in Philadelphia, PA, I bring a hands-on, professional approach to every property I manage and every client I serve. I take pride in treating each property as if it were my own — with attention to detail, proactive communication, and a genuine commitment to excellence.</p>
+        <p>In addition to property management and preservation services, I also help families and individuals plan unforgettable vacation experiences. Because at the end of the day, life is about more than just work — it's about creating memories and living fully.</p>
+        <p>My mission is simple: to give you back your time, protect your investment, and open the door to new experiences. I'm not just your property manager — I'm your partner in building the life you deserve.</p>
+        <p class="signature">Erin Carter</p>
+        <p class="sig-title">Founder & CEO, Tranquil Escapes Property Management</p>
+      </div>
+    </div>
+
+    <div class="values-section">
+      <h2>What We Stand For</h2>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🌊</div>
+          <h3>Peace of Mind</h3>
+          <p>We handle the details so you don't have to. From tenant issues to maintenance, we've got it covered — always.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">✨</div>
+          <h3>Excellence</h3>
+          <p>We hold ourselves to the highest standard in every interaction, every property, and every travel experience we curate.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🤝</div>
+          <h3>Integrity</h3>
+          <p>Transparent communication, honest pricing, and a genuine commitment to doing right by every client we serve.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SERVICES ══════════════════ -->
+<div id="services" class="section">
+  <div class="page-header">
+    <h1>Our Services</h1>
+    <div class="gold-divider"></div>
+    <p>Everything your property — and your life — needs</p>
+  </div>
+  <div class="services-wrap">
+    <div class="services-intro">
+      <h2>Comprehensive Solutions Under One Roof</h2>
+      <p>At Tranquil Escapes, we offer three core services designed to protect your investment, maintain your property's value, and enrich your lifestyle. Whether you own one property or many, we tailor our approach to fit your needs.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" onclick="showSection('management', document.querySelectorAll('.nav-links a')[3])">
+        <div class="service-card-header">
+          <div class="icon">🏠</div>
+          <h3>Property Management</h3>
+        </div>
+        <div class="service-card-body">
+          <p>Full-service management for residential properties and short-term rentals. We handle everything so you can enjoy the returns without the headaches.</p>
+          <ul>
+            <li>Tenant screening & placement</li>
+            <li>Rent collection & financial reporting</li>
+            <li>Maintenance coordination</li>
+            <li>Short-term rental management</li>
+            <li>Property inspections</li>
+          </ul>
+          <span class="service-link">Learn More →</span>
+        </div>
+      </div>
+      <div class="service-card" onclick="showSection('preservation', document.querySelectorAll('.nav-links a')[4])">
+        <div class="service-card-header">
+          <div class="icon">🔧</div>
+          <h3>Property Preservation</h3>
+        </div>
+        <div class="service-card-body">
+          <p>Protecting vacant, bank-owned, and foreclosure properties to maintain their value and meet lender compliance standards.</p>
+          <ul>
+            <li>Winterization & securing</li>
+            <li>Lawn care & debris removal</li>
+            <li>Interior & exterior inspections</li>
+            <li>Lock changes & boarding</li>
+            <li>Rehab coordination</li>
+          </ul>
+          <span class="service-link">Learn More →</span>
+        </div>
+      </div>
+      <div class="service-card" onclick="showSection('vacation', document.querySelectorAll('.nav-links a')[5])">
+        <div class="service-card-header">
+          <div class="icon">✈️</div>
+          <h3>Vacation Planning</h3>
+        </div>
+        <div class="service-card-body">
+          <p>Custom-crafted travel experiences for families, couples, and solo adventurers. We plan every detail so you can simply enjoy the journey.</p>
+          <ul>
+            <li>Custom itinerary creation</li>
+            <li>Hotel & resort booking</li>
+            <li>Flight coordination</li>
+            <li>Group & family travel</li>
+            <li>Luxury & budget options</li>
+          </ul>
+          <span class="service-link">Learn More →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PROPERTY MANAGEMENT ══════════════════ -->
+<div id="management" class="section">
+  <div class="page-header">
+    <h1>Property Management</h1>
+    <div class="gold-divider"></div>
+    <p>Full-service management, zero stress</p>
+  </div>
+  <div class="mgmt-wrap">
+    <div class="mgmt-intro">
+      <h2>We Manage Your Property Like It's Our Own</h2>
+      <p>Owning property is one of the best investments you can make — but managing it is a full-time job. That's where we come in. At Tranquil Escapes, we take the burden off your shoulders so you can enjoy the rewards of property ownership without the daily headaches.</p>
+    </div>
+    <div class="mgmt-steps">
+      <div class="step-card">
+        <div class="step-number">1</div>
+        <h4>Consultation & Onboarding</h4>
+        <p>We start with a thorough property assessment and create a customized management plan tailored to your goals and your property's needs.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">2</div>
+        <h4>Tenant Placement</h4>
+        <p>We market your property, screen applicants thoroughly, and place qualified, reliable tenants who will respect your investment.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">3</div>
+        <h4>Ongoing Management</h4>
+        <p>From rent collection and maintenance to inspections and reporting — we handle it all while keeping you informed every step of the way.</p>
+      </div>
+    </div>
+    <div class="mgmt-features">
+      <div class="mgmt-feature">
+        <div class="mgmt-feature-icon">📋</div>
+        <div>
+          <h4>Tenant Screening & Placement</h4>
+          <p>Comprehensive background, credit, and rental history checks to ensure you get the best tenants for your property.</p>
+        </div>
+      </div>
+      <div class="mgmt-feature">
+        <div class="mgmt-feature-icon">💰</div>
+        <div>
+          <h4>Rent Collection & Financial Reports</h4>
+          <p>Timely rent collection with detailed monthly financial statements so you always know where your money stands.</p>
+        </div>
+      </div>
+      <div class="mgmt-feature">
+        <div class="mgmt-feature-icon">🔨</div>
+        <div>
+          <h4>Maintenance & Repairs</h4>
+          <p>We coordinate all maintenance requests using our trusted network of licensed and insured contractors.</p>
+        </div>
+      </div>
+      <div class="mgmt-feature">
+        <div class="mgmt-feature-icon">🏡</div>
+        <div>
+          <h4>Short-Term Rental Management</h4>
+          <p>Airbnb, VRBO, and vacation rental management including listing optimization, guest communication, and turnover cleaning.</p>
+        </div>
+      </div>
+      <div class="mgmt-feature">
+        <div class="mgmt-feature-icon">🔍</div>
+        <div>
+          <h4>Property Inspections</h4>
+          <p>Regular move-in, move-out, and routine inspections with detailed reports and photo documentation.</p>
+        </div>
+      </div>
+      <div class="mgmt-feature">
+        <div class="mgmt-feature-icon">📣</div>
+        <div>
+          <h4>Marketing & Advertising</h4>
+          <p>Professional listings across top platforms to minimize vacancy and maximize your rental income.</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; padding:2.5rem; background:var(--navy); color:white;">
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.6rem; margin-bottom:0.8rem;">Ready to Hand Off the Stress?</h3>
+      <p style="color:rgba(255,255,255,0.8); margin-bottom:1.5rem; max-width:500px; margin-left:auto; margin-right:auto; line-height:1.8;">Let us manage your property so you can focus on what matters most.</p>
+      <a href="#" class="btn-primary" onclick="showSection('contact', document.querySelectorAll('.nav-links a')[6])">Schedule a Consultation</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PROPERTY PRESERVATION ══════════════════ -->
+<div id="preservation" class="section">
+  <div class="page-header">
+    <h1>Property Preservation</h1>
+    <div class="gold-divider"></div>
+    <p>Protecting your investment at every stage</p>
+  </div>
+  <div class="pres-wrap">
+    <div class="pres-intro">
+      <h2>Safeguarding Properties with Precision & Care</h2>
+      <p>Property preservation is about protecting what matters — whether it's a vacant home, a bank-owned property, or a foreclosure in need of attention. We work with homeowners, lenders, and asset management companies to maintain properties to the highest industry standards.</p>
+    </div>
+    <div class="pres-grid">
+      <div class="pres-item">
+        <div class="pres-icon">❄️</div>
+        <div>
+          <h4>Winterization</h4>
+          <p>Complete winterization services to protect plumbing, heating systems, and the structure of vacant properties during cold months.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">🔒</div>
+        <div>
+          <h4>Securing & Lock Changes</h4>
+          <p>Boarding of windows and doors, lock changes, and re-keying to secure vacant or foreclosed properties from unauthorized entry.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">🌿</div>
+        <div>
+          <h4>Lawn Care & Debris Removal</h4>
+          <p>Regular grass cutting, weed removal, leaf cleanup, and debris hauling to keep properties in compliance and curb appeal high.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">🏚️</div>
+        <div>
+          <h4>Initial Secure & Convey</h4>
+          <p>First-time property securing including full inspections, photo documentation, and completion of all required lender reports.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">🔍</div>
+        <div>
+          <h4>Property Inspections & Reports</h4>
+          <p>Routine occupancy checks, interior and exterior inspections, and detailed photo reports delivered to lenders and asset managers.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">🛠️</div>
+        <div>
+          <h4>Rehab & Repairs Coordination</h4>
+          <p>Minor to major repair coordination using licensed contractors, from cosmetic updates to full property rehabilitation projects.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">🧹</div>
+        <div>
+          <h4>Interior Cleaning & Trash Out</h4>
+          <p>Complete interior cleanouts, junk removal, and deep cleaning services to prepare properties for sale or re-occupancy.</p>
+        </div>
+      </div>
+      <div class="pres-item">
+        <div class="pres-icon">📋</div>
+        <div>
+          <h4>Lender Compliance</h4>
+          <p>Full compliance with HUD, Fannie Mae, Freddie Mac, and private lender guidelines for property condition and maintenance standards.</p>
+        </div>
+      </div>
+    </div>
+    <div class="pres-cta">
+      <h3>Protect Your Property Investment Today</h3>
+      <p>Whether you're a homeowner, lender, or asset manager — we have the expertise to keep your property safe, compliant, and market-ready.</p>
+      <a href="#" class="btn-primary" onclick="showSection('contact', document.querySelectorAll('.nav-links a')[6])">Get a Free Quote</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ VACATION PLANNING ══════════════════ -->
+<div id="vacation" class="section">
+  <div class="page-header">
+    <h1>Vacation Planning</h1>
+    <div class="gold-divider"></div>
+    <p>Your dream trip, perfectly planned</p>
+  </div>
+  <div class="travel-wrap">
+    <div class="travel-banner">
+      <h2>Life is Too Short for Ordinary Travel</h2>
+      <p>From tropical getaways to cultural adventures, we craft personalized travel experiences that match your vision, your budget, and your lifestyle. Sit back — we handle every single detail.</p>
+      <a href="#" class="btn-primary" onclick="showSection('contact', document.querySelectorAll('.nav-links a')[6])">Plan My Trip</a>
+    </div>
+    <div class="travel-packages">
+      <div class="pkg-card">
+        <div class="pkg-header">
+          <div class="pkg-icon">🌴</div>
+          <h3>Leisure & Beach Escapes</h3>
+        </div>
+        <div class="pkg-body">
+          <p>Unwind on white-sand beaches with curated resort packages, private excursions, and seamless travel arrangements.</p>
+          <ul>
+            <li>Caribbean & tropical destinations</li>
+            <li>All-inclusive resort packages</li>
+            <li>Couples & honeymoon getaways</li>
+            <li>Beach villa rentals</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-header">
+          <div class="pkg-icon">👨‍👩‍👧‍👦</div>
+          <h3>Family & Group Travel</h3>
+        </div>
+        <div class="pkg-body">
+          <p>Creating unforgettable family memories with kid-friendly itineraries and group travel coordination that takes the stress off you.</p>
+          <ul>
+            <li>Family resort packages</li>
+            <li>Theme park & adventure trips</li>
+            <li>Group cruise bookings</li>
+            <li>Reunion & celebration travel</li>
+          </ul>
+        </div>
+      </div>
+      <div class="pkg-card">
+        <div class="pkg-header">
+          <div class="pkg-icon">🌍</div>
+          <h3>Cultural & International</h3>
+        </div>
+        <div class="pkg-body">
+          <p>Explore the world's most breathtaking destinations with expertly planned international itineraries and cultural immersion experiences.</p>
+          <ul>
+            <li>European city tours</li>
+            <li>African safari packages</li>
+            <li>Asian cultural experiences</li>
+            <li>Custom international itineraries</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="travel-why">
+      <h3>Why Plan With Tranquil Escapes?</h3>
+      <div class="why-grid">
+        <div class="why-item">
+          <div class="why-icon">🗺️</div>
+          <h4>Custom Itineraries</h4>
+          <p>Every trip is built around your preferences — no cookie-cutter packages here.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">💲</div>
+          <h4>Best Value</h4>
+          <p>We find the best deals without compromising on quality or experience.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">📞</div>
+          <h4>24/7 Support</h4>
+          <p>We're with you before, during, and after your trip — any time you need us.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🎯</div>
+          <h4>Stress-Free</h4>
+          <p>Flights, hotels, excursions — we handle every detail so you just enjoy.</p>
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--cream); padding:2.5rem; text-align:center; border-top: 4px solid var(--gold);">
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.6rem; margin-bottom:0.8rem; color:var(--navy);">Ready to Start Planning?</h3>
+      <p style="color:var(--gray); margin-bottom:1.5rem; max-width:500px; margin-left:auto; margin-right:auto; line-height:1.8;">Tell us your dream destination and let's make it happen — on your timeline and your budget.</p>
+      <a href="#" class="btn-primary" onclick="showSection('contact', document.querySelectorAll('.nav-links a')[6])">Book a Travel Consultation</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ CONTACT ══════════════════ -->
+<div id="contact" class="section">
+  <div class="page-header">
+    <h1>Contact Us</h1>
+    <div class="gold-divider"></div>
+    <p>We'd love to hear from you</p>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <h2>Get In Touch</h2>
+        <div class="contact-detail">
+          <div class="c-icon">📧</div>
+          <div>
+            <h4>Email</h4>
+            <p><a href="mailto:info@tranquilescapespropertymanagement.com">info@tranquilescapespropertymanagement.com</a></p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="c-icon">📞</div>
+          <div>
+            <h4>Phone</h4>
+            <p><a href="tel:2676994098">267-699-4098</a></p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="c-icon">📍</div>
+          <div>
+            <h4>Location</h4>
+            <p>Philadelphia, PA & Surrounding Areas</p>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="c-icon">🌐</div>
+          <div>
+            <h4>Website</h4>
+            <p><a href="https://www.tranquilescapespropertymgmt.com" target="_blank">www.tranquilescapespropertymgmt.com</a></p>
+          </div>
+        </div>
+        <div style="margin-top:2rem; padding:1.5rem; background:var(--cream); border-left:4px solid var(--gold);">
+          <p style="font-family:'Playfair Display',serif; font-size:1rem; color:var(--navy); margin-bottom:0.3rem;">Office Hours</p>
+          <p style="color:var(--gray); font-size:0.88rem; line-height:1.8;">Monday – Friday: 9:00 AM – 6:00 PM<br/>Saturday: 10:00 AM – 3:00 PM<br/>Sunday: By Appointment</p>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h2>Send a Message</h2>
+        <form onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="Your phone number" />
+          </div>
+          <div class="form-group">
+            <label>Service Interested In</label>
+            <select>
+              <option value="">Select a service...</option>
+              <option>Property Management</option>
+              <option>Property Preservation</option>
+              <option>Vacation Planning</option>
+              <option>General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="Tell us how we can help you..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <img src="https://media.base44.com/images/public/6a0638c9d48fc3764e9cd50f/b78885351_TranquilEscapesPropertyManagementLogo.png" alt="Tranquil Escapes Logo" style="height:80px; width:auto; margin-bottom:0.8rem; filter:brightness(0) invert(1) opacity(0.85);" /><br/>
+  <div class="footer-brand">Tranquil Escapes Property Management</div>
+  <p>Philadelphia, PA &nbsp;|&nbsp; <a href="mailto:info@tranquilescapespropertymanagement.com">info@tranquilescapespropertymanagement.com</a> &nbsp;|&nbsp; <a href="tel:2676994098">267-699-4098</a></p>
+  <p style="margin-top:0.8rem;">© 2026 Tranquil Escapes Property Management. All rights reserved.</p>
+</footer>
+
+<script>
+  function showSection(id, navEl) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert('Thank you for reaching out! We will be in touch with you shortly.');
+    e.target.reset();
+  }
+</script>
+</body>
+</html>
