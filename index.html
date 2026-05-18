@@ -898,22 +898,22 @@
       </div>
       <div class="contact-form">
         <h2>Send a Message</h2>
-        <form onsubmit="handleSubmit(event)">
+        <form id="contactForm" onsubmit="handleSubmit(event)">
           <div class="form-group">
             <label>Full Name</label>
-            <input type="text" placeholder="Your full name" required />
+            <input type="text" name="name" placeholder="Your full name" required />
           </div>
           <div class="form-group">
             <label>Email Address</label>
-            <input type="email" placeholder="your@email.com" required />
+            <input type="email" name="email" placeholder="your@email.com" required />
           </div>
           <div class="form-group">
             <label>Phone Number</label>
-            <input type="tel" placeholder="Your phone number" />
+            <input type="tel" name="phone" placeholder="Your phone number" />
           </div>
           <div class="form-group">
             <label>Service Interested In</label>
-            <select>
+            <select name="service">
               <option value="">Select a service...</option>
               <option>Property Management</option>
               <option>Property Preservation</option>
@@ -923,9 +923,15 @@
           </div>
           <div class="form-group">
             <label>Message</label>
-            <textarea placeholder="Tell us how we can help you..."></textarea>
+            <textarea name="message" placeholder="Tell us how we can help you..."></textarea>
           </div>
-          <button type="submit" class="form-submit">Send Message</button>
+          <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+          <div id="formSuccess" style="display:none; margin-top:1rem; padding:1rem; background:#d4edda; color:#155724; border-radius:4px; text-align:center; font-weight:600;">
+            ✅ Thank you! Your message has been sent. We'll be in touch shortly!
+          </div>
+          <div id="formError" style="display:none; margin-top:1rem; padding:1rem; background:#f8d7da; color:#721c24; border-radius:4px; text-align:center;">
+            Something went wrong. Please email us directly at info@tranquilescapespropertymanagement.com
+          </div>
         </form>
       </div>
     </div>
@@ -949,10 +955,42 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    alert('Thank you for reaching out! We will be in touch with you shortly.');
-    e.target.reset();
+    const btn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('formSuccess');
+    const errorMsg = document.getElementById('formError');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+
+    const form = e.target;
+    const data = {
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      service: form.service.value,
+      message: form.message.value
+    };
+
+    try {
+      const res = await fetch('https://formspree.io/f/erinl29@yahoo.com', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        successMsg.style.display = 'block';
+        form.reset();
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    } catch(err) {
+      errorMsg.style.display = 'block';
+    }
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
   }
 </script>
 </body>
